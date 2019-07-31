@@ -10,7 +10,7 @@ downloadPaleogeography(Age = 0)
 \item{Age}{A whole number up to 550}
 }
 \value{
-An rgdal compatible shapefile
+A simple features object
 }
 \description{
 Download a paleogeographic map for an age expressed in millions of years ago.
@@ -34,4 +34,3 @@ Downloads a map of paleocontinents for a specific age from Macrostrat.org as a s
 \author{
 Andrew A. Zaffos
 }
-

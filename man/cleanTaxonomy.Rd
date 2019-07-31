@@ -9,7 +9,7 @@ cleanTaxonomy(Data, Taxonomy = "genus")
 \arguments{
 \item{Data}{A data frame of taxonomic ocurrences downloaded from the paleobiology database API.}
 
-\item{Taxonomy}{A characer string}
+\item{Taxonomy}{A character string}
 }
 \value{
 Will return a data frame identical to the original, but with the genus column cleaned.
@@ -32,4 +32,3 @@ Will remove NA's and subgenera from the genus column of a PBDB dataset. It can a
 \author{
 Andrew A. Zaffos
 }
-

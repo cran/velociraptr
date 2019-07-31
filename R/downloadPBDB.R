@@ -25,20 +25,21 @@
 #'
 #' @examples
 #'
-#'	# Download a test dataset of Ypresian bivalves.
-#'	# DataPBDB<-downloadPBDB(Taxa="Bivalvia",StartInterval="Ypresian",StopInterval="Ypresian")
+#' # Download a test dataset of Ypresian bivalves.
+#' # DataPBDB<-downloadPBDB(Taxa="Bivalvia",StartInterval="Ypresian",StopInterval="Ypresian")
 #'
-#'  # Download a test dataset of Ordovician-Silurian trilobites and brachiopods.
-#'  # DataPBDB<-downloadPBDB(c("Trilobita","Brachiopoda"),"Ordovician","Silurian")
+#' # Download a test dataset of Ordovician-Silurian trilobites and brachiopods.
+#' # DataPBDB<-downloadPBDB(c("Trilobita","Brachiopoda"),"Ordovician","Silurian")
 #'
-#'	@rdname downloadPBDB
-#'	@export
+#' @rdname downloadPBDB
+#' @export
 # A function for downloading data from the Paleobiology database
 downloadPBDB<-function(Taxa,StartInterval="Pliocene",StopInterval="Pleistocene") {
-	Taxa<-paste(Taxa,collapse=",")
-	URL<-paste("https://paleobiodb.org/data1.2/occs/list.csv?base_name=",Taxa,"&interval=",StartInterval,",",StopInterval,"&show=coords,paleoloc,phylo&limit=all",sep="")
-	GotURL<-RCurl::getURL(URL)
-	File<-utils::read.csv(text=GotURL,header=TRUE)
+	StartInterval<-gsub(" ","%20",StartInterval)
+	StopInterval<-gsub(" ","%20",StopInterval)
+  Taxa<-paste(Taxa,collapse=",")
+	URL<-paste0("https://paleobiodb.org/data1.2/occs/list.csv?base_name=",Taxa,"&interval=",StartInterval,",",StopInterval,"&show=coords,paleoloc,class&limit=all")
+	File<-utils::read.csv(URL,header=TRUE)
 	# Subset to include the most generically useful columns
 	File<-File[,c("occurrence_no","collection_no","reference_no","phylum","class","order","family","genus","accepted_name","early_interval","late_interval","max_ma","min_ma","lng","lat","paleolng","paleolat","geoplate")]
 	return(File)

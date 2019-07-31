@@ -3,7 +3,7 @@
 #' Removes NAs and subgenera from the genus column.
 #'
 #' @param Data A data frame of taxonomic ocurrences downloaded from the paleobiology database API.
-#' @param Taxonomy A characer string
+#' @param Taxonomy A character string
 #'
 #' @details Will remove NA's and subgenera from the genus column of a PBDB dataset. It can also be used on other datasets of similar structure to convert species names to genus, or remove NAs.
 #'
@@ -13,14 +13,14 @@
 #'
 #' @examples
 #'
-#'	# Download a test dataset of Cenozoic bivalves.
-#'	# DataPBDB<-downloadPBDB(Taxa="Bivalvia",StartInterval="Cenozoic",StopInterval="Cenozoic")
+#' # Download a test dataset of Cenozoic bivalves.
+#' # DataPBDB<-downloadPBDB(Taxa="Bivalvia",StartInterval="Cenozoic",StopInterval="Cenozoic")
 #'
-#'	# Clean up the genus column.
-#'	# CleanedPBDB<-cleanTaxonomy(DataPBDB,"genus")
+#' # Clean up the genus column.
+#' # CleanedPBDB<-cleanTaxonomy(DataPBDB,"genus")
 #'
-#'	@rdname cleanTaxonomy
-#'	@export
+#' @rdname cleanTaxonomy
+#' @export
 # Find the min and max age range of a taxonomic ranking - e.g., genus.
 cleanTaxonomy<-function(Data,Taxonomy="genus") {
 	Data<-subset(Data,Data[,Taxonomy]!="") # Remove NAs

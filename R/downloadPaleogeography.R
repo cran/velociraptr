@@ -8,29 +8,24 @@
 #'
 #' @author Andrew A. Zaffos
 #'
-#' @return An rgdal compatible shapefile
-#'
-#' @import RCurl
-#' @import rgdal
+#' @return A simple features object
 #'
 #' @examples
 #'
-#'	# Download a test dataset of Maastrichtian bivalves.
-#'	# DataPBDB<-downloadPBDB(Taxa="Bivalvia",StartInterval="Maastrichtian",StopInterval="Maastrichtian")
+#' # Download a test dataset of Maastrichtian bivalves.
+#' # DataPBDB<-downloadPBDB(Taxa="Bivalvia",StartInterval="Maastrichtian",StopInterval="Maastrichtian")
 #'
-#'	# Download a paleogeographic map.
-#'	# KTBoundary<-downloadPaleogeography(Age=66)
+#' # Download a paleogeographic map.
+#' # KTBoundary<-downloadPaleogeography(Age=66)
 #'
-#'	# Plot the paleogeographic map (uses rgdal) and the PBDB points.
-#'	# plot(KTBoundary,col="grey")
-#'	# points(x=DataPBDB[,"paleolng"],y=DataPBDB[,"paleolat"],pch=16,cex=2)
+#' # Plot the paleogeographic map (uses rgdal) and the PBDB points.
+#' # plot(KTBoundary,col="grey")
+#' # points(x=DataPBDB[,"paleolng"],y=DataPBDB[,"paleolat"],pch=16,cex=2)
 #'
-#'	@rdname downloadPaleogeography
-#'	@export
+#' @rdname downloadPaleogeography
+#' @export
 # download maps of paleocontinents from Macrostrat
 downloadPaleogeography<-function(Age=0) {
-	URL<-paste("https://macrostrat.org/api/paleogeography?format=geojson_bare&age=",Age,sep="")
-	GotURL<-RCurl::getURL(URL)
-	Map<-rgdal::readOGR(GotURL,"OGRGeoJSON",verbose=FALSE)
-	return(Map)
+	URL<-paste0("https://macrostrat.org/api/v2/paleogeography?format=geojson_bare&age=",Age)
+	return(sf::st_read(URL))
 	}

@@ -6,43 +6,47 @@
 #'
 #' @aliases taxonAlpha,meanAlpha,taxonBeta,sampleBeta,totalGamma
 #'
-#' @details Takes a community matrix (see \code{presenceMatrix} or \code{abundanceMatrix}) and returns the either the alpha, beta, or gamma richness of a community matrix. Some of these functions were presented in Holland, SM (2010) "Additive diversity partitioning in palaeobiology: revisiting Sepkoski’s question" \emph{Paleontology} 53:1237-1254. Namely, \code{taxonAlpha}, \code{taxonBeta}, \code{sampleBeta}, \code{meanAlpha}, \code{totalBeta}, and \code{totalGamma}.
-#'	\itemize{
-##'  \item{\code{taxonAlpha(CommunityMatrix)}} {Calculates the contribution to alpha diversity of each taxon.}
-##'  \item{\code{meanAlpha(CommunityMatrix)}} {Calculates the average alpha diversity of all samples.}
+#' @details Takes a community matrix (see \code{presenceMatrix} or \code{abundanceMatrix}) and returns the either the alpha, beta, or gamma richness of a community matrix.
+#'
+#' These functions were originally presented in Holland, SM (2010) "Additive diversity partitioning in palaeobiology: revisiting Sepkoski’s question" \emph{Paleontology} 53:1237-1254.
+#'
+#' \itemize{
+##' \item{\code{taxonAlpha(CommunityMatrix)}} {Calculates the contribution to alpha diversity of each taxon.}
+##' \item{\code{meanAlpha(CommunityMatrix)}} {Calculates the average alpha diversity of all samples.}
 ##'
-##'  \item{\code{taxonBeta(CommunityMatrix)}} {Calculates the contribution to beta diversity of each taxon.}
-##'	 \item{\code{sampleBeta(CommunityMatrix)}} {Calculates the contribution to beta diversity of each sample.}
-##'  \item{\code{totalBeta(CommunityMatrix)}} {Calculates the total beta diversity.}
+##' \item{\code{taxonBeta(CommunityMatrix)}} {Calculates the contribution to beta diversity of each taxon.}
+##'	\item{\code{sampleBeta(CommunityMatrix)}} {Calculates the contribution to beta diversity of each sample.}
+##' \item{\code{totalBeta(CommunityMatrix)}} {Calculates the total beta diversity.}
 ##'
-##'	 \item{\code{totalGamma(CommunityMatrix)}} {Calculates the richness of all samples in the community matrix.}
-##' }
+##'	\item{\code{totalGamma(CommunityMatrix)}} {Calculates the richness of all samples in the community matrix.}
+##'  }
 #'
 #' @return A vector of the alpha, beta, or gamma richness of a taxon, sample, or entire community matrix.
 #'
 #' @author Andrew A. Zaffos
 #'
 #' @examples
-#'	# Download a test dataset of pleistocene bivalves.
-#'	# DataPBDB<-downloadPBDB(Taxa="Bivalvia",StartInterval="Pleistocene",StopInterval="Pleistocene")
+#' # Download a test dataset of pleistocene bivalves.
+#' # DataPBDB<-downloadPBDB(Taxa="Bivalvia",StartInterval="Pleistocene",StopInterval="Pleistocene")
 #'
-#'	# Create a community matrix with tectonic plates as "samples"
-#'	# CommunityMatrix<-abundanceMatrix(DataPBDB,"geoplate")
+#' # Create a community matrix with tectonic plates as "samples"
+#' # CommunityMatrix<-abundanceMatrix(DataPBDB,"geoplate")
 #'
-#'	# Calculate the average richness of all samples in a community.
-#'	# meanAlpha(CommunityMatrix)
+#' # Calculate the average richness of all samples in a community.
+#' # meanAlpha(CommunityMatrix)
 #'
-#'	# The beta diversity of all samples in a community.
-#'	# totalBeta(CommunityMatrix)
+#' # The beta diversity of all samples in a community.
+#' # totalBeta(CommunityMatrix)
 #'
-#'	# This is, by definition, equivalent to the gamma diversity - mean alpha diversity.
-#'	# totalBeta(CommunityMatrix)==(totalGamma(CommunityMatrix)-meanAlpha(CommunityMatrix))
+#' # This is, by definition, equivalent to the gamma diversity - mean alpha diversity.
+#' # totalBeta(CommunityMatrix)==(totalGamma(CommunityMatrix)-meanAlpha(CommunityMatrix))
 #'
-#'	@rdname additiveBeta
-#'	@export
+#' @rdname additiveBeta
+#' @export
 # returns vector of each taxon’s contribution to alpha diversity
 taxonAlpha <- function(CommunityMatrix) {
-	Nj <- apply(CommunityMatrix, MARGIN=2, FUN=sum)
+  CommunityMatrix[CommunityMatrix>0]<-1
+  Nj <- apply(CommunityMatrix, 2, sum)
 	Samples <- nrow(CommunityMatrix)
 	Alphaj <- Nj/Samples
 	names(Alphaj) <- colnames(CommunityMatrix)
@@ -60,7 +64,8 @@ meanAlpha <- function (CommunityMatrix) {
 #'	@export
 # returns vector of each taxon’s contribution to beta diversity
 taxonBeta <- function(CommunityMatrix) {
-	Nj <- apply(CommunityMatrix, MARGIN=2, FUN=sum)
+  CommunityMatrix[CommunityMatrix>0]<-1
+	Nj <- apply(CommunityMatrix, 2, sum)
 	Samples <- nrow(CommunityMatrix)
 	Betaj <- (Samples - Nj) / Samples
 	names(Betaj) <- colnames(CommunityMatrix)
@@ -71,8 +76,8 @@ taxonBeta <- function(CommunityMatrix) {
 #'	@export
 # returns vector of each sample’s contribution to beta diversity
 sampleBeta <- function(CommunityMatrix) {
-	Betaj <- taxonBeta(CommunityMatrix)
-	Nj <- apply(CommunityMatrix, MARGIN=2, FUN=sum)
+  Betaj <- taxonBeta(CommunityMatrix)
+	Nj <- apply(CommunityMatrix, 2, sum)
 	NSamples <- nrow(CommunityMatrix)
 	Betai <- vector(mode="numeric", length=NSamples)
 	for (i in 1:NSamples) {
